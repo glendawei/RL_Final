@@ -1,0 +1,75 @@
+# PyTorch model files
+*.pt
+*.pth
+
+
+
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+
+# RL project large outputs (exclude from VCS)
+A2C_charts/
+DQN_charts/
+PPO_charts/
+results_A2C/
+results_DQN/
+results_PPO/
+wandb/
+training/prompts/
+
+# Logs and cache
+*.log
+.cache/
+cache/
+**/.pytest_cache/
+
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+
+G14_result/
+wandb/
