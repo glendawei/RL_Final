@@ -1,14 +1,37 @@
 
+# Data-Efficient Optimization of the Segment Anything Model for Automatic Bubble Segmentation
 
-## 🔧 Install SAM-HQ Weights
 
 
+## Brief Introduction
+
+This project proposes a **data-efficient reinforcement learning framework** to optimize the **Segment Anything Model (SAM)** for automatic bubble (pore) segmentation.
+Instead of relying on manually designed point prompts, we formulate prompt placement as a sequential decision-making problem and train an RL agent to automatically select informative point prompts that improve segmentation quality.
+The SAM backbone remains frozen, enabling efficient adaptation with limited proprietary data while maintaining strong generalization.
+
+---
+
+## Environments (Mandatory)
+
+Please ensure the following environment setup:
+
+```bash
+conda activate <your_env_name>
+```
+
+* Python **3.9.20**
+* Do `pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu117` first
+* Dependencies listed in `requirements.txt`
+
+---
+
+## �� Install SAM-HQ Weights
 
 This project requires the **SAM-HQ (Segment Anything High-Quality)** model.
 
-Please download the official weight file from HuggingFace:
+Download the official weights from HuggingFace:
 
-👉 **[https://huggingface.co/lkeab/hq-sam/blob/main/sam_hq_vit_l.pth](https://huggingface.co/lkeab/hq-sam/blob/main/sam_hq_vit_l.pth)**
+👉 [https://huggingface.co/lkeab/hq-sam/blob/main/sam_hq_vit_l.pth](https://huggingface.co/lkeab/hq-sam/blob/main/sam_hq_vit_l.pth)
 
 After downloading, place the file at:
 
@@ -32,17 +55,57 @@ FileNotFoundError: ./segmenter/checkpoint/sam_hq_vit_l.pth not found
 
 ---
 
-## 🚀 Training on GPU
+## Execution Overview
 
-To start training with GPU acceleration, run:
+* Training **must be performed on GPU**
+* CUDA-enabled PyTorch is required
 
-```bash
-python train_gpu.py
+
+---
+
+## Proprietary Data Notice
+
+The dataset and the file `lora_rank512.safetensors` used in this work are **proprietary** and **not publicly available** (provided by 材料所).
+Therefore, we cannot release these files publicly.
+
+For users who have access to the dataset, the data should be organized into **separate training and testing splits**, each containing three subdirectories: prompts, masks, and images.
+The expected directory structure is as follows:
+
+```text
+training/
+├── prompts/
+├── masks/
+└── images/
+
+testing/
+├── prompts/
+├── masks/
+└── images/
 ```
 
-Make sure your environment has:
+where:
 
-* PyTorch with CUDA
+* `prompts/` contains pre-generated prompt files (e.g., initial point indices or feature-based prompts),
+* `masks/` contains the corresponding ground-truth segmentation masks,
+* `images/` contains the raw input images.
+
+
+To facilitate reproducibility and evaluation, we instead provide **pretrained model weights** that can be used for inference and benchmarking without access to the proprietary data.
+
+###  Pretrained Model
+the model has been incude in zip 
+
+```
+results_ppo/251213_ppo/final_ppo_model.zip
+```
+
+---
+
+## Dependencies
+
+Make sure your environment includes:
+
+* PyTorch (with CUDA)
 * stable-baselines3
 * tqdm
 * wandb (optional)
@@ -50,40 +113,57 @@ Make sure your environment has:
 * PIL
 * numpy
 
-Example installation:
+---
+
+## Training (Mandatory)
+
+### Step 1: Generate Initial Prompts (Optional)
+
+If **initial prompts do not exist**, run:
 
 ```bash
-pip install -r requirements.txt
+python Generate_initial_prompts.py
 ```
+
+If initial prompts already exist, **this step can be skipped**.
 
 ---
 
-## 📁 Required Data Structure
+### Step 2: Train the RL Agent
 
-Ensure your folders follow this layout:
-dataset: https://nturlcoursefa-mrl3467.slack.com/archives/C09PQU9RZND/p1765264796368009
-
-```
-prompts/
-    pore1_4on4/
-        initial_prompts/
-            <prefix>_features.pt
-            <prefix>_initial_indices_pos.pt
-            <prefix>_initial_indices_neg.pt
-
-dataset/
-    pore1_4on4/
-        pore1_images/
-            <prefix>.png
-        pore1_masks/
-            <prefix>.png
+```bash
+python train.py
 ```
 
-Each `<prefix>` must have:
+This step trains the RL agent to optimize point prompt placement for SAM.
 
-* features
-* pos indices
-* neg indices
-* raw image
-* ground truth mask
+---
 
+## Inference
+
+To generate segmentation masks for the testing set:
+
+```bash
+python inference.py
+```
+
+The script outputs predicted mask images for downstream evaluation.
+
+
+
+## Evaluation
+
+To compute quantitative metrics:
+
+```bash
+python eval.py
+```
+
+This script compares predicted masks with ground truth and reports segmentation performance.
+
+---
+
+🔗 **Project Repository (code and experimental details):**  
+https://github.com/glendawei/RL_Final
+
+---
