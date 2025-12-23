@@ -9,20 +9,24 @@ This project proposes a **data-efficient reinforcement learning framework** to o
 Instead of relying on manually designed point prompts, we formulate prompt placement as a sequential decision-making problem and train an RL agent to automatically select informative point prompts that improve segmentation quality.
 The SAM backbone remains frozen, enabling efficient adaptation with limited proprietary data while maintaining strong generalization.
 
----
 
 ## Environments (Mandatory)
-
-Please ensure the following environment setup:
-
+Please ensure the following environment setup before running the code:
 ```bash
 conda activate <your_env_name>
 ```
-
+**Requirements:**
 * Python **3.9.20**
-* Do `pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu117` first
-* Dependencies listed in `requirements.txt`
-
+* Install PyTorch with CUDA support **before** installing other dependencies:
+```bash
+pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 \
+--extra-index-url https://download.pytorch.org/whl/cu117
+```
+* Install the remaining dependencies listed in `requirements.txt`:
+```bash
+pip install -r requirements.txt
+```
+---
 ---
 
 ## Install SAM-HQ Weights
