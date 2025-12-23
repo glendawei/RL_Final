@@ -25,7 +25,7 @@ conda activate <your_env_name>
 
 ---
 
-## �� Install SAM-HQ Weights
+## Install SAM-HQ Weights
 
 This project requires the **SAM-HQ (Segment Anything High-Quality)** model.
 
